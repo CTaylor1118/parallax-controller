@@ -58,7 +58,13 @@ export function getTransformStyles(
   effects: ParallaxStartEndEffects,
   progress: number
 ): string {
-  const transform: string = TRANSFORM_EFFECTS.reduce((acc, key: string) => {
+  const translateXEffect = effects.translateX && scaleEffectByProgress(effects.translateX, progress);
+  const translateYEffect = effects.translateY && scaleEffectByProgress(effects.translateY, progress);
+  const translateXString = `${translateXEffect?.value ?? 0}${translateXEffect?.unit ?? ''}`;
+  const translateYString = `${translateYEffect?.value ?? 0}${translateYEffect?.unit ?? ''}`;
+  const translate = (translateXEffect?.value ||  translateYEffect?.value) ? `translate(${translateXString},${translateYString})` : '';
+
+  const transform: string = TRANSFORM_EFFECTS.reduce((acc, key) => {
     const scaledEffect =
       // @ts-expect-error
       effects[key] && scaleEffectByProgress(effects[key], progress);
@@ -71,10 +77,14 @@ export function getTransformStyles(
       return acc;
     }
 
+    if (key === 'translateX' || key === 'translateY') {
+      return acc;
+    }
+
     const styleStr = `${key}(${scaledEffect.value}${scaledEffect.unit})`;
 
-    return acc + styleStr;
-  }, ' ');
+    return [acc, styleStr].join(' ');
+  }, translate);
 
   return transform;
 }
