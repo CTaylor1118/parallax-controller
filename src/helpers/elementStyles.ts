@@ -74,7 +74,7 @@ export function getTransformStyles(
     const styleStr = `${key}(${scaledEffect.value}${scaledEffect.unit})`;
 
     return acc + styleStr;
-  }, '');
+  }, ' ');
 
   return transform;
 }
