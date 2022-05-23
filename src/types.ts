@@ -73,7 +73,7 @@ export type ParsedValueEffect = {
   easing?: EasingFunction;
 };
 
-export type ViewElement = HTMLElement | Window;
+export type ViewElement = HTMLElement | SVGElement | Window;
 export type ParallaxControllerOptions = {
   scrollAxis?: ValidScrollAxis;
   scrollContainer?: HTMLElement;
@@ -108,7 +108,7 @@ export type ParallaxElementConfig = {
 
   startScroll?: number;
   endScroll?: number;
-  targetElement?: HTMLElement;
+  targetElement?: HTMLElement | SVGElement;
 
   onEnter?: (element: Element) => any;
   onExit?: (element: Element) => any;
@@ -117,7 +117,7 @@ export type ParallaxElementConfig = {
 };
 
 export type CreateElementOptions = {
-  el: HTMLElement;
+  el: HTMLElement | SVGElement;
   props: ParallaxElementConfig;
 };
 

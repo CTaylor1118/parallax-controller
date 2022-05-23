@@ -10,7 +10,7 @@ export class Rect {
   bottom: number;
 
   constructor(options: {
-    el: HTMLElement;
+    el: HTMLElement | SVGElement;
     view: View;
     rootMargin?: RootMarginShape;
   }) {
@@ -27,8 +27,8 @@ export class Rect {
         left: rect.left - scrollRect.left,
       };
     }
-    this.height = options.el.offsetHeight;
-    this.width = options.el.offsetWidth;
+    this.height = options.el.getBoundingClientRect().height;
+    this.width = options.el.getBoundingClientRect().width;
     this.left = rect.left;
     this.right = rect.right;
     this.top = rect.top;

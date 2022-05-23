@@ -134,8 +134,8 @@ export class ParallaxController {
 
   _addResizeObserver() {
     try {
-      const observedEl: HTMLElement = this._hasScrollContainer
-        ? (this.viewEl as HTMLElement)
+      const observedEl: HTMLElement | SVGElement= this._hasScrollContainer
+        ? (this.viewEl as HTMLElement | SVGElement)
         : document.documentElement;
       this._resizeObserver = new ResizeObserver(() => this.update());
       this._resizeObserver.observe(observedEl);

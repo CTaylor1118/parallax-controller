@@ -32,7 +32,7 @@ type ElementConstructorOptions = CreateElementOptions & {
 };
 
 export class Element {
-  el: HTMLElement;
+  el: HTMLElement | SVGElement;
   props: ParallaxElementConfig;
   scrollAxis: ValidScrollAxis;
   id: number;

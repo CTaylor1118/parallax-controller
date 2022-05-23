@@ -8,25 +8,30 @@ const TRANSFORM_EFFECTS = Object.values(ValidCSSEffects).filter(
 );
 
 export function setWillChangeStyles(
-  el: HTMLElement,
+  el: HTMLElement | SVGElement,
   effects: ParallaxStartEndEffects
 ) {
   const keys = Object.keys(effects);
   const hasOpacity = keys.includes('opacity');
   const willChange = `transform${hasOpacity ? ',opacity' : ''}`;
-  el.style.willChange = willChange;
+  el.style.setProperty('will-change', willChange);
 }
 
 export function setElementStyles(
   effects: ParallaxStartEndEffects,
   progress: number,
-  el?: HTMLElement
+  el?: HTMLElement | SVGElement
 ) {
   if (!el) return;
   const transform = getTransformStyles(effects, progress);
   const opacity = getOpacityStyles(effects, progress);
-  el.style.transform = transform;
-  el.style.opacity = opacity;
+  if (el instanceof HTMLElement) {
+    el.style.setProperty('transform', transform);
+    el.style.setProperty('opacity', opacity);
+  } else {
+    el.setAttribute('transform', transform);
+    el.setAttribute('opacity', opacity);
+  }
 }
 
 export function getOpacityStyles(
@@ -81,6 +86,11 @@ export function getTransformStyles(
 export function resetStyles(element: Element) {
   const el = element.el;
   if (!el) return;
-  el.style.transform = '';
-  el.style.opacity = '';
+  if (el instanceof HTMLElement) {
+    el.style.removeProperty('transform');
+    el.style.removeProperty('opacity');
+  } else {
+    el.removeAttribute('transform');
+    el.removeAttribute('opactity');
+  }
 }
