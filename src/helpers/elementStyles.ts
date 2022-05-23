@@ -26,11 +26,11 @@ export function setElementStyles(
   const transform = getTransformStyles(effects, progress);
   const opacity = getOpacityStyles(effects, progress);
   if (el instanceof HTMLElement) {
-    el.style.setProperty('transform', transform);
-    el.style.setProperty('opacity', opacity);
+    transform && el.style.setProperty('transform', transform);
+    opacity && el.style.setProperty('opacity', opacity);
   } else {
-    el.setAttribute('transform', transform);
-    el.setAttribute('opacity', opacity);
+    transform && el.setAttribute('transform', transform);
+    opacity && el.setAttribute('opacity', opacity);
   }
 }
 
