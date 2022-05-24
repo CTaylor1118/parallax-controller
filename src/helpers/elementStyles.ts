@@ -25,13 +25,8 @@ export function setElementStyles(
   if (!el) return;
   const transform = getTransformStyles(effects, progress);
   const opacity = getOpacityStyles(effects, progress);
-  if (el instanceof HTMLElement) {
-    transform && el.style.setProperty('transform', transform);
-    opacity && el.style.setProperty('opacity', opacity);
-  } else {
-    transform && el.setAttribute('transform', transform);
-    opacity && el.setAttribute('opacity', opacity);
-  }
+  el.style.setProperty('transform', transform);
+  el.style.setProperty('opacity', opacity);
 }
 
 export function getOpacityStyles(
@@ -58,13 +53,7 @@ export function getTransformStyles(
   effects: ParallaxStartEndEffects,
   progress: number
 ): string {
-  const translateXEffect = effects.translateX && scaleEffectByProgress(effects.translateX, progress);
-  const translateYEffect = effects.translateY && scaleEffectByProgress(effects.translateY, progress);
-  const translateXString = `${translateXEffect?.value ?? 0}${translateXEffect?.unit ?? ''}`;
-  const translateYString = `${translateYEffect?.value ?? 0}${translateYEffect?.unit ?? ''}`;
-  const translate = (translateXEffect?.value ||  translateYEffect?.value) ? `translate(${translateXString},${translateYString})` : '';
-
-  const transform: string = TRANSFORM_EFFECTS.reduce((acc, key) => {
+  const transform: string = TRANSFORM_EFFECTS.map((key: string) => {
     const scaledEffect =
       // @ts-expect-error
       effects[key] && scaleEffectByProgress(effects[key], progress);
@@ -74,17 +63,11 @@ export function getTransformStyles(
       typeof scaledEffect.value === 'undefined' ||
       typeof scaledEffect.unit === 'undefined'
     ) {
-      return acc;
+      return '';
     }
 
-    if (key === 'translateX' || key === 'translateY') {
-      return acc;
-    }
-
-    const styleStr = `${key}(${scaledEffect.value}${scaledEffect.unit})`;
-
-    return [acc, styleStr].join(' ');
-  }, translate);
+    return `${key}(${scaledEffect.value}${scaledEffect.unit})`;
+  }).join(' ');
 
   return transform;
 }
@@ -96,11 +79,6 @@ export function getTransformStyles(
 export function resetStyles(element: Element) {
   const el = element.el;
   if (!el) return;
-  if (el instanceof HTMLElement) {
-    el.style.removeProperty('transform');
-    el.style.removeProperty('opacity');
-  } else {
-    el.removeAttribute('transform');
-    el.removeAttribute('opactity');
-  }
+  el.style.removeProperty('transform');
+  el.style.removeProperty('opacity');
 }
